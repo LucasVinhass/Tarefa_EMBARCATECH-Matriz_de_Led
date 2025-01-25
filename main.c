@@ -197,7 +197,7 @@ void coracao_pulsando(PIO pio, uint sm, double r, double g, double b)
             sleep_ms(delay_ms); // Espera antes de passar para o próximo quadro
         }
     }
-}
+}// :)
 
 
 // função principal
