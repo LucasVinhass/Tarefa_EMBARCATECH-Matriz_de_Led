@@ -211,6 +211,15 @@ void animacao_quadrado_azul(PIO pio, uint sm, double r, double g, double b)
     }
 }
 
+void desligar_leds(PIO pio, uint sm)
+{
+    uint32_t valor_led = matrix_rgb(0.0, 0.0, 0.0); // Todos os LEDs com intensidade 0
+    for (int i = 0; i < NUM_PIXELS; i++)
+    {
+        pio_sm_put_blocking(pio, sm, valor_led); // Envia comando para apagar os LEDs
+    }
+}
+
 
 // função principal
 int main()
@@ -263,6 +272,7 @@ int main()
             case '6':
                 break;
             case 'A':
+            desligar_leds(pio, sm);
                 break;
             case 'B':
                 break;
