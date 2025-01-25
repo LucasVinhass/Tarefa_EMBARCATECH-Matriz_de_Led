@@ -155,61 +155,49 @@ void imprimir_todos_vermelhos(double *desenho, uint32_t valor_led, PIO pio, uint
     imprimir_binario(valor_led);
 }
 
-// Função para exibir a animação de um quadrado azul da esquerda para a direita
-void animacao_quadrado_azul(PIO pio, uint sm, double r, double g, double b)
+// Função para exibir um coração pulsando
+void coracao_pulsando(PIO pio, uint sm, double r, double g, double b)
 {
     uint32_t valor_led;
     const int delay_ms = 200; // Tempo entre os quadros da animação
 
-    // Define os padrões para a animação (quadrado azul em diferentes posições)
-    double padrao_1[25] = {1.0, 0.0, 0.0, 0.0, 0.0,
-                           1.0, 0.0, 0.0, 0.0, 0.0,
-                           1.0, 0.0, 0.0, 0.0, 0.0,
-                           1.0, 0.0, 0.0, 0.0, 0.0,
-                           1.0, 0.0, 0.0, 0.0, 0.0};
+    // Padrões do coração (ativa LEDs específicos em cada linha)
+    double padrao_1[25] = {0.0, 1.0, 0.0, 1.0, 0.0,
+                           1.0, 1.0, 1.0, 1.0, 1.0,
+                           1.0, 1.0, 1.0, 1.0, 1.0,
+                           0.0, 1.0, 1.0, 1.0, 0.0,
+                           0.0, 0.0, 1.0, 0.0, 0.0};
 
-    double padrao_2[25] = {1.0, 1.0, 0.0, 0.0, 0.0,
-                           1.0, 0.0, 0.0, 0.0, 0.0,
-                           1.0, 0.0, 0.0, 0.0, 0.0,
-                           1.0, 0.0, 0.0, 0.0, 0.0,
-                           1.0, 1.0, 0.0, 0.0, 0.0};
+    double padrao_2[25] = {0.0, 0.8, 0.0, 0.8, 0.0,
+                           0.8, 0.8, 0.8, 0.8, 0.8,
+                           0.8, 0.8, 0.8, 0.8, 0.8,
+                           0.0, 0.8, 0.8, 0.8, 0.0,
+                           0.0, 0.0, 0.8, 0.0, 0.0};
 
-    double padrao_3[25] = {1.0, 1.0, 1.0, 0.0, 0.0,
-                           1.0, 0.0, 0.0, 0.0, 0.0,
-                           1.0, 0.0, 0.0, 0.0, 0.0,
-                           1.0, 0.0, 0.0, 0.0, 0.0,
-                           1.0, 1.0, 1.0, 0.0, 0.0};
-
-    double padrao_4[25] = {1.0, 1.0, 1.0, 1.0, 0.0,
-                           1.0, 0.0, 0.0, 0.0, 0.0,
-                           1.0, 0.0, 0.0, 0.0, 0.0,
-                           1.0, 0.0, 0.0, 0.0, 0.0,
-                           1.0, 1.0, 1.0, 1.0, 0.0};
-
-    double padrao_5[25] = {1.0, 1.0, 1.0, 1.0, 1.0,
-                           1.0, 0.0, 0.0, 0.0, 1.0,
-                           1.0, 0.0, 0.0, 0.0, 1.0,
-                           1.0, 0.0, 0.0, 0.0, 1.0,
-                           1.0, 1.0, 1.0, 1.0, 1.0};
+    double padrao_3[25] = {0.0, 0.5, 0.0, 0.5, 0.0,
+                           0.5, 0.5, 0.5, 0.5, 0.5,
+                           0.5, 0.5, 0.5, 0.5, 0.5,
+                           0.0, 0.5, 0.5, 0.5, 0.0,
+                           0.0, 0.0, 0.5, 0.0, 0.0};
 
     // Sequência de padrões para a animação
-    double *padroes[] = {padrao_1, padrao_2, padrao_3, padrao_4, padrao_5};
+    double *padroes[] = {padrao_1, padrao_2, padrao_3, padrao_2};
     int num_padroes = sizeof(padroes) / sizeof(padroes[0]);
 
-    // Exibir os padrões em sequência
+    // Exibir os padrões em sequência para criar o efeito de pulsação
     for (int ciclo = 0; ciclo < 3; ciclo++) // Repetir a animação 3 vezes
     {
         for (int i = 0; i < num_padroes; i++)
         {
             for (int j = 0; j < NUM_PIXELS; j++)
             {
-                valor_led = matrix_rgb(b = padroes[i][24 - j], r, g); // Usa o padrão atual
+                valor_led = matrix_rgb(b, r = padroes[i][24 - j], g); // Usa o padrão atual
                 pio_sm_put_blocking(pio, sm, valor_led);
             }
             sleep_ms(delay_ms); // Espera antes de passar para o próximo quadro
         }
     }
-}
+}// :)
 
 void desligar_leds(PIO pio, uint sm)
 {
@@ -224,6 +212,7 @@ void desligar_leds(PIO pio, uint sm)
 // função principal
 int main()
 {
+    printf("Iniciando o programa\n");
     PIO pio = pio0;
     bool ok;
     uint16_t i;
@@ -259,11 +248,11 @@ int main()
             case '0':
                 break;
             case '1':
-            animacao_quadrado_azul(pio, sm, 0.0, 0.0, 1.0);
                 break;
             case '2':
                 break;
             case '3':
+            coracao_pulsando(pio, sm, 1.0, 0.0, 0.0); // Exibir coração pulsando em vermelho
                 break;
             case '4':
                 break;
