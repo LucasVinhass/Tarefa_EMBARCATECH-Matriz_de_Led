@@ -89,6 +89,11 @@ double desenho2[25] = {1.0, 0.0, 0.0, 0.0, 1.0,
                        0.0, 0.0, 1.0, 0.0, 0.0,
                        0.0, 1.0, 0.0, 1.0, 0.0,
                        1.0, 0.0, 0.0, 0.0, 1.0};
+// vetor para o caso C
+double desenho_todos_vermelhos[25] = {0.8, 0.8, 0.8, 0.8, 0.8,
+                                      0.8, 0.8, 0.8, 0.8, 0.8,
+                                      0.8, 0.8, 0.8, 0.8, 0.8,
+                                      0.8, 0.8, 0.8, 0.8, 0.8};
 
 // imprimir valor binário
 void imprimir_binario(int num)
@@ -138,6 +143,18 @@ void desenho_pio(double *desenho, uint32_t valor_led, PIO pio, uint sm, double r
     imprimir_binario(valor_led);
 }
 
+//rotina para quando a tecla C for pressionada
+void imprimir_todos_vermelhos(double *desenho, uint32_t valor_led, PIO pio, uint sm, double r, double g, double b)
+{
+
+    for (int16_t i = 0; i < NUM_PIXELS; i++)
+    {
+            valor_led = matrix_rgb(b, r, g);
+            pio_sm_put_blocking(pio, sm, valor_led);
+    }
+    imprimir_binario(valor_led);
+}
+
 // função principal
 int main()
 {
@@ -166,20 +183,6 @@ int main()
     uint sm = pio_claim_unused_sm(pio, true);
     main_program_init(pio, sm, offset, OUT_PIN);
 
-    // // inicializar o botão de interrupção - GPIO5
-    // gpio_init(button_0);
-    // gpio_set_dir(button_0, GPIO_IN);
-    // gpio_pull_up(button_0);
-
-    // // inicializar o botão de interrupção - GPIO5
-    // gpio_init(button_1);
-    // gpio_set_dir(button_1, GPIO_IN);
-    // gpio_pull_up(button_1);
-
-    // // interrupção da gpio habilitada
-    // gpio_set_irq_enabled_with_callback(button_0, GPIO_IRQ_EDGE_FALL, 1, &gpio_irq_handler);
-    //
-    // looop infinito
     while (true)
     {
         char key = read_keypad(); // Lê a tecla pressionada no teclado
@@ -198,7 +201,7 @@ int main()
                 break;
             case '4':
                 break;
-            case '5':             
+            case '5':
                 break;
             case '6':
                 break;
@@ -207,6 +210,7 @@ int main()
             case 'B':
                 break;
             case 'C':
+            imprimir_todos_vermelhos(desenho_todos_vermelhos, valor_led, pio, sm, 1, 0, 0);
                 break;
             case 'D':
                 break;
