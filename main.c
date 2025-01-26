@@ -171,7 +171,7 @@ void imprimir_todos_vermelhos(double *desenho, uint32_t valor_led, PIO pio, uint
     imprimir_binario(valor_led);
 }
 // Função para exibir uma seta animada
-seta_animada(PIO pio, uint sm, double r, double g, double b)
+void seta_animada(PIO pio, uint sm, double r, double g, double b)
 {
     uint32_t valor_led;
     const int delay_ms = 200; // Tempo entre os quadros da animação
