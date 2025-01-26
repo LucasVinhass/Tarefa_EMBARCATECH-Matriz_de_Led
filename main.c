@@ -95,6 +95,14 @@ double desenho_todos_vermelhos[25] = {0.8, 0.8, 0.8, 0.8, 0.8,
                                       0.8, 0.8, 0.8, 0.8, 0.8,
                                       0.8, 0.8, 0.8, 0.8, 0.8};
 
+double desenho_todos_azuis[25] =
+    {
+        1.0, 1.0, 1.0, 1.0, 1.0,
+        1.0, 1.0, 1.0, 1.0, 1.0,
+        1.0, 1.0, 1.0, 1.0, 1.0,
+        1.0, 1.0, 1.0, 1.0, 1.0,
+        1.0, 1.0, 1.0, 1.0, 1.0};
+
 // imprimir valor binário
 void imprimir_binario(int num)
 {
@@ -142,19 +150,62 @@ void desenho_pio(double *desenho, uint32_t valor_led, PIO pio, uint sm, double r
     }
     imprimir_binario(valor_led);
 }
-
-//rotina para quando a tecla C for pressionada
+void imprimir_todos_azuis(double *desenho, uint32_t valor_led, PIO pio, uint sm, double r, double g, double b)
+{
+    for (int16_t i = 0; i < NUM_PIXELS; i++)
+    {
+        valor_led = matrix_rgb(b, r, g);         // Todos os LEDs com intensidade azul (b = 1.0, r = 0.0, g = 0.0)
+        pio_sm_put_blocking(pio, sm, valor_led); // Envia comando para acender os LEDs azuis
+    }
+    imprimir_binario(valor_led); // Opcional: Imprime o valor binário do LED
+}
+// rotina para quando a tecla C for pressionada
 void imprimir_todos_vermelhos(double *desenho, uint32_t valor_led, PIO pio, uint sm, double r, double g, double b)
 {
 
     for (int16_t i = 0; i < NUM_PIXELS; i++)
     {
-            valor_led = matrix_rgb(b, r, g);
-            pio_sm_put_blocking(pio, sm, valor_led);
+        valor_led = matrix_rgb(b, r, g);
+        pio_sm_put_blocking(pio, sm, valor_led);
     }
     imprimir_binario(valor_led);
 }
+// Função para exibir uma seta animada
+seta_animada(PIO pio, uint sm, double r, double g, double b)
+{
+    uint32_t valor_led;
+    const int delay_ms = 200; // Tempo entre os quadros da animação
 
+    // Define os padrões para a animação da seta pra cima
+    double seta_1[25] = {0.0, 0.0, 1.0, 0.0, 0.0,
+                         0.0, 1.0, 1.0, 1.0, 0.0,
+                         0.0, 0.0, 1.0, 0.0, 0.0,
+                         0.0, 0.0, 1.0, 0.0, 0.0,
+                         0.0, 0.0, 0.0, 0.0, 0.0};
+    // Define os padrões para a animação da seta pra baixo
+
+    double seta_2[25] = {0.0, 0.0, 0.0, 0.0, 0.0,
+                         0.0, 0.0, 1.0, 0.0, 0.0,
+                         0.0, 1.0, 1.0, 1.0, 0.0,
+                         0.0, 0.0, 1.0, 0.0, 0.0,
+                         0.0, 0.0, 0.0, 0.0, 0.0};
+    double *padroes[] = {seta_1, seta_2};
+    int num_padroes = sizeof(padroes) / sizeof(padroes[0]);
+
+    // Exibir os padrões em sequência para criar o efeito de animação da seta
+    for (int ciclo = 0; ciclo < 2; ciclo++) // Repetir a animação 3 vezes
+    {
+        for (int i = 0; i < num_padroes; i++)
+        {
+            for (int j = 0; j < NUM_PIXELS; j++)
+            {
+                valor_led = matrix_rgb(b = padroes[i][24 - j], r, g); // Usa o padrão atual
+                pio_sm_put_blocking(pio, sm, valor_led);
+            }
+            sleep_ms(delay_ms); // Espera antes de passar para o próximo quadro
+        }
+    }
+}
 // Função para exibir um coração pulsando
 void coracao_pulsando(PIO pio, uint sm, double r, double g, double b)
 {
@@ -197,7 +248,7 @@ void coracao_pulsando(PIO pio, uint sm, double r, double g, double b)
             sleep_ms(delay_ms); // Espera antes de passar para o próximo quadro
         }
     }
-}// :)
+} // :)
 
 void desligar_leds(PIO pio, uint sm)
 {
@@ -264,8 +315,6 @@ void animacao_quadrado_azul(PIO pio, uint sm, double r, double g, double b)
     }
 }
 
-
-
 // função principal
 int main()
 {
@@ -305,30 +354,34 @@ int main()
             case '0':
                 break;
             case '1':
-            animacao_quadrado_azul(pio, sm, 0.0, 0.0, 1.0);
+                animacao_quadrado_azul(pio, sm, 0.0, 0.0, 1.0);
                 break;
             case '2':
                 break;
             case '3':
-            coracao_pulsando(pio, sm, 1.0, 0.0, 0.0); // Exibir coração pulsando em vermelho
+                coracao_pulsando(pio, sm, 1.0, 0.0, 0.0); // Exibir coração pulsando em vermelho
                 break;
             case '4':
+                seta_animada(pio, sm, 0.0, 0.0, 1.0); // Chama a animação da seta
+
                 break;
             case '5':
                 break;
             case '6':
                 break;
             case 'A':
-            desligar_leds(pio, sm);
+                desligar_leds(pio, sm);
                 break;
             case 'B':
                 break;
             case 'C':
-            imprimir_todos_vermelhos(desenho_todos_vermelhos, valor_led, pio, sm, 1, 0, 0);
+                imprimir_todos_vermelhos(desenho_todos_vermelhos, valor_led, pio, sm, 1, 0, 0);
                 break;
             case 'D':
                 break;
             case '#':
+                imprimir_todos_azuis(desenho_todos_azuis, valor_led, pio, sm, 0, 0, 1);
+
                 break;
             case '*':
                 break;
