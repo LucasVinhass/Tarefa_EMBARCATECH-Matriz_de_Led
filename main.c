@@ -315,6 +315,61 @@ void animacao_quadrado_azul(PIO pio, uint sm, double r, double g, double b)
     }
 }
 
+// Função para exibir a animação da letra A
+void animacao_letra(PIO pio, uint sm, double r, double g, double b)
+{
+    uint32_t valor_led;
+    const int delay_ms = 200; // Tempo entre os quadros da animação
+
+    // Define os padrões para a animação (quadrado azul em diferentes posições)
+    double padrao_1[25] = {1.0, 0.0, 0.0, 0.0, 0.0,
+                           0.0, 0.0, 0.0, 0.0, 0.0,
+                           0.0, 0.0, 0.0, 0.0, 0.0,
+                           0.0, 0.0, 0.0, 0.0, 0.0,
+                           0.0, 0.0, 0.0, 0.0, 0.0};
+
+    double padrao_2[25] = {1.0, 1.0, 1.0, 1.0, 0.0,
+                           0.0, 0.0, 0.0, 0.0, 1.0,
+                           1.0, 0.0, 0.0, 0.0, 0.0,
+                           0.0, 0.0, 0.0, 0.0, 0.0,
+                           0.0, 0.0, 0.0, 0.0, 0.0};
+
+    double padrao_3[25] = {1.0, 1.0, 1.0, 1.0, 0.0,
+                           0.0, 0.0, 0.0, 0.0, 1.0,
+                           1.0, 1.0, 1.0, 0.0, 0.0,
+                           0.0, 0.0, 0.0, 0.0, 0.0,
+                           1.0, 0.0, 0.0, 0.0, 0.0};
+
+    double padrao_4[25] = {1.0, 1.0, 1.0, 1.0, 0.0,
+                           0.0, 0.0, 0.0, 0.0, 1.0,
+                           1.0, 1.0, 1.0, 0.0, 0.0,
+                           0.0, 0.0, 0.0, 0.0, 1.0,
+                           1.0, 0.0, 0.0, 0.0, 0.0};
+
+    double padrao_5[25] = {1.0, 1.0, 1.0, 1.0, 0.0,
+                           0.0, 0.0, 0.0, 0.0, 1.0,
+                           1.0, 1.0, 1.0, 0.0, 0.0,
+                           0.0, 0.0, 0.0, 0.0, 1.0,
+                           1.0, 1.0, 1.0, 1.0, 0.0};
+
+    // Sequência de padrões para a animação
+    double *padroes[] = {padrao_1, padrao_2, padrao_3, padrao_4, padrao_5};
+    int num_padroes = sizeof(padroes) / sizeof(padroes[0]);
+
+    // Exibir os padrões em sequência
+        for (int i = 0; i < num_padroes; i++)
+        {
+            for (int j = 0; j < NUM_PIXELS; j++)
+            {
+                valor_led = matrix_rgb(padroes[i][24-j],  g, r); // Usa o padrão atual
+                pio_sm_put_blocking(pio, sm, valor_led);
+            }
+            sleep_ms(delay_ms); // Espera antes de passar para o próximo quadro
+        }
+    
+}
+
+
 // função principal
 int main()
 {
@@ -366,6 +421,7 @@ int main()
 
                 break;
             case '5':
+                 animacao_letra(pio, sm, 0.0, 0.0, 1.0); // Mostra a animação da letra A
                 break;
             case '6':
                 break;
