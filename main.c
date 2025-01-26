@@ -266,7 +266,7 @@ void animacao_quadrado_azul(PIO pio, uint sm, double r, double g, double b)
 void contagem(PIO pio, uint sm, double r, double g, double b)
 {
     uint32_t valor_led;
-    const int delay_ms = 400; // Tempo entre os quadros da animação
+    const int delay_ms = 1000; // Tempo entre os quadros da animação
 
     // numeros sequenciais (ativa LEDs específicos em cada linha)
     double numero_5[25] = {1.0, 1.0, 1.0, 1.0, 1.0,
@@ -276,16 +276,16 @@ void contagem(PIO pio, uint sm, double r, double g, double b)
                            1.0, 1.0, 1.0, 1.0, 1.0};
 
     double numero_4[25] = {1.0, 0.0, 0.0, 1.0, 0.0,
-                           1.0, 0.0, 1.0, 1.0, 0.0,
+                           1.0, 0.0, 0.0, 1.0, 0.0,
                            1.0, 1.0, 1.0, 1.0, 0.0,
                            0.0, 0.0, 0.0, 1.0, 0.0,
                            0.0, 0.0, 0.0, 1.0, 0.0};
 
-    double numero_3[25] = {1.0, 1.0, 1.0, 1.0, 1.0,
-                           0.0, 0.0, 0.0, 1.0, 0.0,
-                           1.0, 1.0, 1.0, 1.0, 1.0,
-                           0.0, 0.0, 0.0, 1.0, 0.0,
-                           1.0, 1.0, 1.0, 1.0, 1.0};
+    double numero_3[25] = {0.0, 1.0, 1.0, 1.0, 1.0,
+                           0.0, 0.0, 0.0, 0.0, 1.0,
+                           0.0, 0.0, 1.0, 1.0, 1.0,
+                           0.0, 0.0, 0.0, 0.0, 0.0,
+                           0.0, 1.0, 1.0, 1.0, 1.0};
 
     double numero_2[25] = {1.0, 1.0, 1.0, 1.0, 1.0,
                            0.0, 0.0, 0.0, 0.0, 1.0,
@@ -306,7 +306,8 @@ void contagem(PIO pio, uint sm, double r, double g, double b)
                            1.0, 1.0, 1.0, 1.0, 1.0};
 
     // Sequência de padrões para a animação
-    double *digitos[] = {numero_0, numero_1, numero_2, numero_3, numero_4, numero_5};
+    double *digitos[] = {numero_5, numero_4, numero_3, numero_2, numero_1, numero_0};
+    //double *digitos[] = {numero_0};
     int num_digitos = sizeof(digitos) / sizeof(digitos[0]);
 
     // Exibir os numeros em sequência para criar o efeito de contagem
@@ -315,7 +316,7 @@ void contagem(PIO pio, uint sm, double r, double g, double b)
     {
         for (int j = 0; j < NUM_PIXELS; j++)
         {
-            valor_led = matrix_rgb(b, r = digitos[i][24 - j], g); // Usa o padrão atual
+            valor_led = matrix_rgb(0, r = digitos[i][24 - j], 0); // Usa o padrão atual
             pio_sm_put_blocking(pio, sm, valor_led);
         }
         sleep_ms(delay_ms); // Espera antes de passar para o próximo quadro
@@ -324,7 +325,7 @@ void contagem(PIO pio, uint sm, double r, double g, double b)
 
 void leds_verdes(PIO pio, uint sm)
 {
-    uint32_t valor_led = matrix_rgb(0.0, 0.5, 0.0); // liga todos os leds verdes com itensidade de 50%
+    uint32_t valor_led = matrix_rgb(0.0, 0.0, 0.5); // liga todos os leds verdes com itensidade de 50%
     for (int i = 0; i < NUM_PIXELS; i++)
     {
         pio_sm_put_blocking(pio, sm, valor_led); // Envia comando para apagar os LEDs
@@ -392,7 +393,7 @@ int main()
                 imprimir_todos_vermelhos(desenho_todos_vermelhos, valor_led, pio, sm, 1, 0, 0);
                 break;
             case 'D':
-                 leds_verdes(pio, sm)
+                leds_verdes(pio, sm);
                 break;
             case '#':
                 break;
