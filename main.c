@@ -143,14 +143,14 @@ void desenho_pio(double *desenho, uint32_t valor_led, PIO pio, uint sm, double r
     imprimir_binario(valor_led);
 }
 
-//rotina para quando a tecla C for pressionada
+// rotina para quando a tecla C for pressionada
 void imprimir_todos_vermelhos(double *desenho, uint32_t valor_led, PIO pio, uint sm, double r, double g, double b)
 {
 
     for (int16_t i = 0; i < NUM_PIXELS; i++)
     {
-            valor_led = matrix_rgb(b, r, g);
-            pio_sm_put_blocking(pio, sm, valor_led);
+        valor_led = matrix_rgb(b, r, g);
+        pio_sm_put_blocking(pio, sm, valor_led);
     }
     imprimir_binario(valor_led);
 }
@@ -197,7 +197,7 @@ void coracao_pulsando(PIO pio, uint sm, double r, double g, double b)
             sleep_ms(delay_ms); // Espera antes de passar para o próximo quadro
         }
     }
-}// :)
+} // :)
 
 void desligar_leds(PIO pio, uint sm)
 {
@@ -263,8 +263,64 @@ void animacao_quadrado_azul(PIO pio, uint sm, double r, double g, double b)
         }
     }
 }
+void contagem(PIO pio, uint sm, double r, double g, double b)
+{
+    uint32_t valor_led;
+    const int delay_ms = 400; // Tempo entre os quadros da animação
 
+    // numeros sequenciais (ativa LEDs específicos em cada linha)
+    double numero_5[25] = {1.0, 1.0, 1.0, 1.0, 1.0,
+                           1.0, 0.0, 0.0, 0.0, 0.0,
+                           1.0, 1.0, 1.0, 1.0, 1.0,
+                           0.0, 0.0, 0.0, 0.0, 1.0,
+                           1.0, 1.0, 1.0, 1.0, 1.0};
 
+    double numero_4[25] = {1.0, 0.0, 0.0, 1.0, 0.0,
+                           1.0, 0.0, 1.0, 1.0, 0.0,
+                           1.0, 1.0, 1.0, 1.0, 0.0,
+                           0.0, 0.0, 0.0, 1.0, 0.0,
+                           0.0, 0.0, 0.0, 1.0, 0.0};
+
+    double numero_3[25] = {1.0, 1.0, 1.0, 1.0, 1.0,
+                           0.0, 0.0, 0.0, 1.0, 0.0,
+                           1.0, 1.0, 1.0, 1.0, 1.0,
+                           0.0, 0.0, 0.0, 1.0, 0.0,
+                           1.0, 1.0, 1.0, 1.0, 1.0};
+
+    double numero_2[25] = {1.0, 1.0, 1.0, 1.0, 1.0,
+                           0.0, 0.0, 0.0, 0.0, 1.0,
+                           1.0, 1.0, 1.0, 1.0, 1.0,
+                           1.0, 0.0, 0.0, 0.0, 0.0,
+                           1.0, 1.0, 1.0, 1.0, 1.0};
+
+    double numero_1[25] = {0.0, 1.0, 1.0, 0.0, 0.0,
+                           0.0, 0.0, 1.0, 0.0, 0.0,
+                           0.0, 0.0, 1.0, 0.0, 0.0,
+                           0.0, 0.0, 1.0, 0.0, 0.0,
+                           1.0, 1.0, 1.0, 1.0, 1.0};
+
+    double numero_0[25] = {1.0, 1.0, 1.0, 1.0, 1.0,
+                           1.0, 0.0, 0.0, 0.0, 1.0,
+                           1.0, 0.0, 0.0, 0.0, 1.0,
+                           1.0, 0.0, 0.0, 0.0, 1.0,
+                           1.0, 1.0, 1.0, 1.0, 1.0};
+
+    // Sequência de padrões para a animação
+    double *digitos[] = {numero_0, numero_1, numero_2, numero_3, numero_4, numero_5};
+    int num_digitos = sizeof(digitos) / sizeof(digitos[0]);
+
+    // Exibir os numeros em sequência para criar o efeito de contagem
+
+    for (int i = 0; i < num_digitos; i++)
+    {
+        for (int j = 0; j < NUM_PIXELS; j++)
+        {
+            valor_led = matrix_rgb(b, r = digitos[i][24 - j], g); // Usa o padrão atual
+            pio_sm_put_blocking(pio, sm, valor_led);
+        }
+        sleep_ms(delay_ms); // Espera antes de passar para o próximo quadro
+    }
+}
 
 // função principal
 int main()
@@ -305,26 +361,27 @@ int main()
             case '0':
                 break;
             case '1':
-            animacao_quadrado_azul(pio, sm, 0.0, 0.0, 1.0);
+                animacao_quadrado_azul(pio, sm, 0.0, 0.0, 1.0);
                 break;
             case '2':
                 break;
             case '3':
-            coracao_pulsando(pio, sm, 1.0, 0.0, 0.0); // Exibir coração pulsando em vermelho
+                coracao_pulsando(pio, sm, 1.0, 0.0, 0.0); // Exibir coração pulsando em vermelho
                 break;
             case '4':
                 break;
             case '5':
                 break;
             case '6':
+                contagem(pio, sm, 1.0, 1.0, 1.0); // Roda a contagem com os leds brancos
                 break;
             case 'A':
-            desligar_leds(pio, sm);
+                desligar_leds(pio, sm);
                 break;
             case 'B':
                 break;
             case 'C':
-            imprimir_todos_vermelhos(desenho_todos_vermelhos, valor_led, pio, sm, 1, 0, 0);
+                imprimir_todos_vermelhos(desenho_todos_vermelhos, valor_led, pio, sm, 1, 0, 0);
                 break;
             case 'D':
                 break;
