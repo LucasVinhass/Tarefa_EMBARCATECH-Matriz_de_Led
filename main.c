@@ -322,6 +322,14 @@ void contagem(PIO pio, uint sm, double r, double g, double b)
     }
 }
 
+void leds_verdes(PIO pio, uint sm)
+{
+    uint32_t valor_led = matrix_rgb(0.0, 0.5, 0.0); // liga todos os leds verdes com itensidade de 50%
+    for (int i = 0; i < NUM_PIXELS; i++)
+    {
+        pio_sm_put_blocking(pio, sm, valor_led); // Envia comando para apagar os LEDs
+    }
+}
 // função principal
 int main()
 {
@@ -384,6 +392,7 @@ int main()
                 imprimir_todos_vermelhos(desenho_todos_vermelhos, valor_led, pio, sm, 1, 0, 0);
                 break;
             case 'D':
+                 leds_verdes(pio, sm)
                 break;
             case '#':
                 break;
