@@ -382,6 +382,56 @@ void leds_verdes(PIO pio, uint sm)
         pio_sm_put_blocking(pio, sm, valor_led); // Envia comando para apagar os LEDs
     }
 }
+// Função para exibir a animação do Pac-Man
+void pacman(PIO pio, uint sm, double r, double g, double b)
+{
+    uint32_t valor_led;
+    const int delay_ms = 100; // Tempo entre os quadros da animação
+
+    // Sequência de cores variadas para as estrelas
+    double cores[6][3] = {
+        {1.0, 1.0, 1.0},  // Branco
+        {1.0, 0.0, 0.0},  // Vermelho
+        {0.0, 1.0, 0.0},  // Verde
+        {0.0, 0.0, 1.0},  // Azul
+        {1.0, 1.0, 0.0},  // Amarelo
+        {0.5, 0.0, 0.5}   // Roxo
+    };
+
+    // Novo padrão corrigido para o fantasma de Pac-Man
+    int pacman_fantasma[25] = {
+        1, 0, 1, 0, 1,  // Linha 1
+        1, 1, 1, 1, 1,  // Linha 2
+        1, 1, 1, 1, 1,  // Linha 3
+        0, 1, 1, 1, 0,  // Linha 4
+        0, 1, 1, 1, 0   // Linha 5
+    }; // Representação da forma do Pac-Man
+
+    // Exibir os padrões em sequência para criar o efeito de explosão colorida
+    for (int ciclo = 0; ciclo < 5; ciclo++) // Repetir a animação 5 vezes
+    {
+        for (int i = 0; i < 6; i++) // Alterando as cores para cada ciclo
+        {
+            for (int j = 0; j < 25; j++)
+            {
+                if (pacman_fantasma[j] == 1)
+                {
+                    // Acende a estrela com a cor atual
+                    valor_led = matrix_rgb(cores[i][0], cores[i][1], cores[i][2]);
+                    pio_sm_put_blocking(pio, sm, valor_led);
+                }
+                else
+                {
+                    // Desliga o LED (apagado)
+                    valor_led = matrix_rgb(0.0, 0.0, 0.0);
+                    pio_sm_put_blocking(pio, sm, valor_led);
+                }
+            }
+            sleep_ms(delay_ms); // Espera antes de passar para o próximo quadro
+        }
+    }
+}
+
 // função principal
 int main()
 {
@@ -424,15 +474,15 @@ int main()
                 animacao_quadrado_azul(pio, sm, 0.0, 0.0, 1.0);
                 break;
             case '2':
+            pacman(pio, sm, 0.0, 0.0, 1.0);  // Exibir a animação pac-man
                 break;
             case '3':
                 coracao_pulsando(pio, sm, 1.0, 0.0, 0.0); // Exibir coração pulsando em vermelho
                 break;
             case '4':
                 seta_animada(pio, sm, 0.0, 0.0, 1.0); // Chama a animação da seta
-
                 break;
-            case '5':
+            case '5': 
                 break;
             case '6':
                 contagem(pio, sm, 1.0, 1.0, 1.0); // Roda a contagem com os leds brancos
