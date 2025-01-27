@@ -95,6 +95,13 @@ double desenho_todos_vermelhos[25] = {0.8, 0.8, 0.8, 0.8, 0.8,
                                       0.8, 0.8, 0.8, 0.8, 0.8,
                                       0.8, 0.8, 0.8, 0.8, 0.8};
 
+// vetor para o caso #
+double desenho_todos_brancos[25] = {0.2, 0.2, 0.2, 0.2, 0.2,
+                                      0.2, 0.2, 0.2, 0.2, 0.2,
+                                      0.2, 0.2, 0.2, 0.2, 0.2,
+                                      0.2, 0.2, 0.2, 0.2, 0.2};
+
+
 double desenho_todos_azuis[25] =
     {
         1.0, 1.0, 1.0, 1.0, 1.0,
@@ -150,6 +157,18 @@ void desenho_pio(double *desenho, uint32_t valor_led, PIO pio, uint sm, double r
     }
     imprimir_binario(valor_led);
 }
+
+// imprimir_todos_brancos(desenho_todos_brancos,valor_led, pio, sm, 1,1,1)
+void imprimir_todos_brancos(double *desenho, uint32_t valor_led, PIO pio, uint sm, double r, double g, double b)
+{
+    for (int16_t i = 0; i < NUM_PIXELS; i++)
+    {
+        valor_led = matrix_rgb(r,g,b);        
+        pio_sm_put_blocking(pio, sm, valor_led);
+    }
+    imprimir_binario(valor_led);
+}
+
 void imprimir_todos_azuis(double *desenho, uint32_t valor_led, PIO pio, uint sm, double r, double g, double b)
 {
     for (int16_t i = 0; i < NUM_PIXELS; i++)
@@ -547,6 +566,7 @@ int main()
                 desligar_leds(pio, sm);
                 break;
             case 'B':
+                imprimir_todos_azuis(desenho_todos_azuis, valor_led, pio, sm, 0, 0, 1);
                 break;
             case 'C':
                 imprimir_todos_vermelhos(desenho_todos_vermelhos, valor_led, pio, sm, 1, 0, 0);
@@ -555,8 +575,7 @@ int main()
                 leds_verdes(pio, sm);
                 break;
             case '#':
-                imprimir_todos_azuis(desenho_todos_azuis, valor_led, pio, sm, 0, 0, 1);
-
+                imprimir_todos_brancos(desenho_todos_brancos,valor_led, pio, sm, 1,1,1) // Liga todos os leds na cor branca com intensidade de 20%
                 break;
             case '*':
                 break;
