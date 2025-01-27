@@ -34,16 +34,16 @@ Este projeto consiste em programar animações em uma **matriz de LEDs RGB (5x5 
 
 ## 📖 Uso do Programa
 
-**- Animações:** Pressione uma tecla numérica (0 a 9) para ativar diferentes animações na matriz de LEDs.
-**- Cores Estáticas:** Use as teclas A, B, C, D ou # para alternar entre as configurações de cor predefinidas.
-**- Reinicialização:** Pressione * para reiniciar o sistema.
+- **Animações:** Pressione uma tecla numérica (0 a 9) para ativar diferentes animações na matriz de LEDs.
+- **Cores Estáticas:** Use as teclas A, B, C, D ou # para alternar entre as configurações de cor predefinidas.
+- **Reinicialização:** Pressione * para reiniciar o sistema.
 
 ---
 
 ## 📽️ Demonstração
 
-Um vídeo explicativo com a execução das funcionalidades pelo YouTube:
-Um vídeo explicativo com a execução das funcionalidades pelo Google Drive:
+##### Um vídeo explicativo com a execução das funcionalidades pelo YouTube:
+##### Um vídeo explicativo com a execução das funcionalidades pelo Google Drive:
 
 ---
 
