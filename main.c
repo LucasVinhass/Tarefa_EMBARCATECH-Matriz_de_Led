@@ -506,6 +506,64 @@ void animacao_letra(PIO pio, uint sm, double r, double g, double b)
 }
 
 
+// Função para exibir a animação de uma explosao
+void animacao_explosao(PIO pio, uint sm, double r, double g, double b)
+{
+    uint32_t valor_led;
+    const int delay_ms = 200; // Tempo entre os quadros da animação
+
+    // Define os frames de animação
+    double frame_1[25] = {0.0, 0.0, 0.0, 0.0, 0.0,
+                           0.0, 0.0, 0.0, 0.0, 0.0,
+                           0.0, 0.0, 1.0, 0.0, 0.0,
+                           0.0, 0.0, 0.0, 0.0, 0.0,
+                           0.0, 0.0, 0.0, 0.0, 0.0};
+    
+    double frame_2[25] = {0.0, 0.0, 0.0, 0.0, 0.0,
+                           0.0, 0.0, 1.0, 0.0, 0.0,
+                           0.0, 1.0, 1.0, 1.0, 0.0,
+                           0.0, 0.0, 1.0, 0.0, 0.0,
+                           0.0, 0.0, 0.0, 0.0, 0.0};
+    
+    double frame_3[25] = {0.0, 0.0, 0.0, 0.0, 0.0,
+                           0.0, 1.0, 1.0, 1.0, 0.0,
+                           0.0, 1.0, 1.0, 1.0, 0.0,
+                           0.0, 1.0, 1.0, 1.0, 0.0,
+                           0.0, 0.0, 0.0, 0.0, 0.0};
+    
+    double frame_4[25] = {0.0, 0.0, 1.0, 0.0, 0.0,
+                           0.0, 1.0, 1.0, 1.0, 0.0,
+                           1.0, 1.0, 1.0, 1.0, 1.0,
+                           0.0, 1.0, 1.0, 1.0, 0.0,
+                           0.0, 0.0, 1.0, 0.0, 0.0};
+
+    double frame_5[25] = {1.0, 0.0, 1.0, 0.0, 1.0,
+                           0.0, 1.0, 1.0, 1.0, 0.0,
+                           1.0, 1.0, 1.0, 1.0, 1.0,
+                           0.0, 1.0, 1.0, 1.0, 0.0,
+                           1.0, 0.0, 1.0, 0.0, 1.0};
+    
+    // Sequência de frames para a animação
+    double *padroes[] = {frame_1, frame_2, frame_3, frame_4, frame_5, frame_4, frame_5};
+    int num_padroes = sizeof(padroes) / sizeof(padroes[0]);
+
+    // Exibir os padrões em sequência
+    for (int ciclo = 0; ciclo < 3; ciclo++) // Repetir a animação 3 vezes
+    {
+        for (int i = 0; i < num_padroes; i++)
+        {
+            for (int j = 0; j < NUM_PIXELS; j++)
+            {
+                valor_led = matrix_rgb(r,g,b); // Usa o padrão atual
+                pio_sm_put_blocking(pio, sm, valor_led);
+            }
+            sleep_ms(delay_ms); // Espera antes de passar para o próximo quadro
+        }
+        
+    }
+}
+
+
 // função principal
 int main()
 {
@@ -543,6 +601,7 @@ int main()
             switch (key)
             {
             case '0':
+                animacao_explosao(pio, sm, 1.0, 1.0, 0.0) // Exibe animação de uma explosão amarela
                 break;
             case '1':
                 animacao_quadrado_azul(pio, sm, 0.0, 0.0, 1.0);
