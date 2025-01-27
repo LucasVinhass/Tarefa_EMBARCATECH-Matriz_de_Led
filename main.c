@@ -601,7 +601,7 @@ int main()
             switch (key)
             {
             case '0':
-                animacao_explosao(pio, sm, 1.0, 1.0, 0.0) // Exibe animação de uma explosão amarela
+                animacao_explosao(pio, sm, 1.0, 1.0, 0.0); // Exibe animação de uma explosão amarela
                 break;
             case '1':
                 animacao_quadrado_azul(pio, sm, 0.0, 0.0, 1.0);
@@ -634,7 +634,7 @@ int main()
                 leds_verdes(pio, sm);
                 break;
             case '#':
-                imprimir_todos_brancos(desenho_todos_brancos,valor_led, pio, sm, 1,1,1) // Liga todos os leds na cor branca com intensidade de 20%
+                imprimir_todos_brancos(desenho_todos_brancos,valor_led, pio, sm, 1,1,1); // Liga todos os leds na cor branca com intensidade de 20%
                 break;
             case '*':
                 break;
