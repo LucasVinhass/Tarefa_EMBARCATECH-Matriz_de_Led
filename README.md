@@ -42,8 +42,8 @@ Este projeto consiste em programar animações em uma **matriz de LEDs RGB (5x5 
 
 ## 📽️ Demonstração
 
-##### Um vídeo explicativo com a execução das funcionalidades pelo YouTube:
-##### Um vídeo explicativo com a execução das funcionalidades pelo Google Drive:
+##### Um vídeo explicativo com a execução das funcionalidades pelo YouTube: https://youtu.be/ebEPllJrCsM
+##### Um vídeo explicativo com a execução das funcionalidades pelo Google Drive: https://drive.google.com/file/d/1dr3hY8AJG7byNFP_Utljf-1TYu-0sJP2/view?usp=sharing
 
 ---
 
